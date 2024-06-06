@@ -1,6 +1,8 @@
 from tqdm.auto import tqdm
 import numpy as np
 
+from transformers import GPT2TokenizerFast
+tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
 def score_text(df, clf, clf_vectorizer, field='text'):
     ## score text using quality filter
@@ -15,7 +17,7 @@ def score_text(df, clf, clf_vectorizer, field='text'):
 def get_counts(df, field='text'):
     # count number of whitespace tokens
     tqdm.pandas()
-    df['num_tokens'] = df[field].progress_apply(lambda x: len(x.split()))
+    df['num_tokens'] = df[field].progress_apply(lambda x: len(tokenizer(x)["input_ids"]))
     return df
 
 def score(x, clf, vectorizer):

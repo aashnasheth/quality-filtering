@@ -34,15 +34,12 @@ def build_school_category_plot(high_schools, news, save=False, save_path=None):
     if save:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
 
-
 def boxplot(z, topics, save=False, save_path=None):
     grouped = z.groupby('cluster')
-    df2 = pd.DataFrame({col:vals['prob_high_quality'] for col,vals in grouped})
-    meds = df2.median()
-    meds.sort_values(ascending=False, inplace=True)
-    df2 = df2[meds.index]
-    cols = df2.columns 
-    ax = sns.boxplot(data=df2[df2.columns[::-1]], orient='h' ,linewidth=2)
+    sns.boxplot(data=z, x="class", y="age")
+
+    df4 = pd.concat([df2[df2.columns[::-1]],df3[df3.columns[::-1]]])
+    ax = sns.boxplot(data=df4, orient='h' ,linewidth=2)
     labels = []
     for i in ax.get_yticklabels():
         labels.append(str(int(float(i.get_text()))) + ":" + " ".join(topics.loc[topics.cluster == int(float(i.get_text()))].top_words.values[0]))
@@ -52,6 +49,49 @@ def boxplot(z, topics, save=False, save_path=None):
     _ = ax.set_xlabel("P(high quality)")
     if save:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
+
+    plt.clf()
+    ax = sns.boxplot(data=df3[df3.columns[::-1]], orient='h' ,linewidth=2)
+    labels = []
+    for i in ax.get_yticklabels():
+        labels.append(str(int(float(i.get_text()))) + ":" + " ".join(topics.loc[topics.cluster == int(float(i.get_text()))].top_words.values[0]))
+    _ = plt.xticks(rotation=90)
+    ax.set_yticklabels(labels)
+    _ = ax.set_xlabel("cluster")
+    _ = ax.set_xlabel("P(high quality)")
+    if save:
+        plt.savefig("ttopic_box_plot_ss.pdf", dpi=300, bbox_inches='tight')
+
+# def boxplot(z, topics, save=False, save_path=None):
+#     grouped = z.groupby('cluster')
+#     df2 = pd.DataFrame({col:vals['prob_high_quality'] for col,vals in grouped})
+#     df3 = pd.DataFrame({col:vals['prob_high_quality_ss'] for col,vals in grouped})
+#     # meds = df2.median()
+#     # meds.sort_values(ascending=False, inplace=True)
+#     # df2 = df2[meds.index]
+#     cols = df2.columns
+#     ax = sns.boxplot(data=df2[df2.columns[::-1]], orient='h' ,linewidth=2)
+#     labels = []
+#     for i in ax.get_yticklabels():
+#         labels.append(str(int(float(i.get_text()))) + ":" + " ".join(topics.loc[topics.cluster == int(float(i.get_text()))].top_words.values[0]))
+#     _ = plt.xticks(rotation=90)
+#     ax.set_yticklabels(labels)
+#     _ = ax.set_xlabel("cluster")
+#     _ = ax.set_xlabel("P(high quality)")
+#     if save:
+#         plt.savefig(save_path, dpi=300, bbox_inches='tight')
+
+#     plt.clf()
+#     ax = sns.boxplot(data=df3[df3.columns[::-1]], orient='h' ,linewidth=2)
+#     labels = []
+#     for i in ax.get_yticklabels():
+#         labels.append(str(int(float(i.get_text()))) + ":" + " ".join(topics.loc[topics.cluster == int(float(i.get_text()))].top_words.values[0]))
+#     _ = plt.xticks(rotation=90)
+#     ax.set_yticklabels(labels)
+#     _ = ax.set_xlabel("cluster")
+#     _ = ax.set_xlabel("P(high quality)")
+#     if save:
+#         plt.savefig("ttopic_box_plot_ss.pdf", dpi=300, bbox_inches='tight')
 
 
 def build_correlation_plots(features, save=False, save_path=None):

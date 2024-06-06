@@ -33,7 +33,7 @@ def train_lr(train,
              dev,
              test,
              search_space):
-    master = pd.concat([train, dev], 0)
+    master = pd.concat([train, dev], axis=0)
     space = HyperparameterSearch(**search_space)
     sample = space.sample()
     if sample.pop('stopwords') == 1:
@@ -52,7 +52,7 @@ def train_lr(train,
                                lowercase=True,
                                ngram_range=ngram_range)
     elif weight == 'hash':
-        vect = HashingVectorizer(stop_words=stop_words, lowercase=True, ngram_range=ngram_range)
+        vect = HashingVectorizer(stop_words=stop_words, lowercase=True, ngram_range=(ngram_range[0], ngram_range[1]))
     else:
         vect = CountVectorizer(binary=binary,
                                stop_words=stop_words,
@@ -88,6 +88,7 @@ def train_lr(train,
     res['ngram_range'] = str(ngram_range)
     res['weight'] = weight
     res['stopwords'] = stop_words
+    print(res['test_accuracy'])
     return classifier, vect, res
 
 
@@ -107,6 +108,7 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
+    args.serialization_dir = "serialized_folder"
 
     if not os.path.isdir(args.serialization_dir):
         os.makedirs(args.serialization_dir)
