@@ -1,5 +1,5 @@
 # quality-filter
-Code for "Whose language is high quality?" paper
+Code for "Changing Notions of High Quality" paper, originally cloned from "Whose Language is High Quality?" Paper
 
 
 ## Install environment
@@ -10,14 +10,9 @@ conda activate ideology
 ```
 
 
-## Run python notebooks
+## Run python files via slurm
 
+Edit `run.sh` then run 
 ```bash
-jupyter notebook
+bash run_slurm.sh
 ```
-
-`Regressions.ipynb` : reproduce the regressions in paper
-
-`Filter.ipynb`: reproduce the quality filter in the paper
-
-`Additional Figures.ipynb`: reproduce other figures in the paper
